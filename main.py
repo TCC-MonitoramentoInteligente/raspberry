@@ -46,7 +46,7 @@ def main(args):
     if args.debug_ip:
         payload['debug_ip'] = args.debug_ip
 
-    register = requests.get(url=register_url, params=payload)
+    register = requests.post(url=register_url, data=payload)
     port = int(register.text)
 
     address = (args.ip, port)
