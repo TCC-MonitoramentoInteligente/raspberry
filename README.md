@@ -8,14 +8,12 @@ Raspberry code to video submission
 
 
 ## Common errors and solutions
-`ImportError: libcblas.so.3: cannot open shared object file: No such file or directory`  
+
+- `ImportError: libcblas.so.3: cannot open shared object file: No such file or directory`  
 `sudo apt-get install libatlas-base-dev`
----
-`ImportError: libjasper.so.1: cannot open shared object file: No such file or directory`  
+- `ImportError: libjasper.so.1: cannot open shared object file: No such file or directory`  
 `sudo apt-get install libjasper-dev`
----
-`ImportError: libQtGui.so.4: cannot open shared object file: No such file or directory`  
+- `ImportError: libQtGui.so.4: cannot open shared object file: No such file or directory`  
 `sudo apt-get install libqtgui4`
----
-`ImportError: libQtTest.so.4: cannot open shared object file: No such file or directory`  
+- `ImportError: libQtTest.so.4: cannot open shared object file: No such file or directory`  
 `sudo apt install libqt4-test`
