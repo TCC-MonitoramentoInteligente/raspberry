@@ -1,2 +1,3 @@
 requests
 opencv-python==3.4.0.12
+paho-mqtt

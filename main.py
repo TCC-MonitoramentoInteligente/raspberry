@@ -3,10 +3,14 @@ import socket
 
 import cv2
 import time
+import sys
 
 import numpy as np
 import requests
+import paho.mqtt.client as mqtt
 
+
+BROKER_IP = 'localhost'
 MAX_SIZE = 65536 - 8  # less 8 bytes of video time
 
 
@@ -92,12 +96,28 @@ def send_video(address, video, desired_fps, gray):
     sock.close()
 
 
+def init_broker():
+    mqtt_client = mqtt.Client()
+    try:
+        mqtt_client.connect(BROKER_IP)
+    except ConnectionRefusedError:
+        time.sleep(5)
+        return False
+    mqtt_client.loop_start()
+    return mqtt_client
+
+
 def main(args):
     register_url = 'http://{}:8000/object-detection/register/'.format(args.ip)
     cam_id = None
 
     while not connected_to_internet():
+        time.sleep(5)
         pass
+
+    mqtt_client = None
+    while not mqtt_client:
+        mqtt_client = init_broker()
 
     if args.rasp_simulator:
         cam_id = -1
@@ -112,7 +132,15 @@ def main(args):
     if args.debug_port:
         payload['debug_port'] = args.debug_port
 
-    register = requests.post(url=register_url, data=payload)
+    try:
+        register = requests.post(url=register_url, data=payload)
+        mqtt_client.publish(topic="raspberry/register", payload=cam_id)
+    except requests.ConnectionError:
+        print("Unable to connect with object detection service")
+        mqtt_client.publish(topic="raspberry/fail_register", payload=cam_id)
+        time.sleep(2)
+        sys.exit(0)
+
     port = int(register.text)
 
     address = (args.ip, port)
