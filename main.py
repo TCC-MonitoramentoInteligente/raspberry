@@ -3,16 +3,12 @@ import socket
 
 import cv2
 import time
-import sys
 
 import numpy as np
 import requests
-import paho.mqtt.client as mqtt
 
-
-# BROKER_IP = '10.1.0.4'
-BROKER_IP = 'localhost'
 MAX_SIZE = 65536 - 8  # less 8 bytes of video time
+GPU_SERVER = '10.1.0.2'
 
 
 def arg_parse():
@@ -99,7 +95,7 @@ def send_video(address, video, desired_fps, gray):
 
 
 def main(args):
-    register_url = 'http://10.0.1.2:8080/object-detection/register/'
+    register_url = 'http://{}:8000/object-detection/register/'.format(GPU_SERVER)
 
     while not connected_to_internet():
         time.sleep(5)
@@ -116,7 +112,7 @@ def main(args):
             register = requests.post(url=register_url, data={'cam_id': cam_id})
 
             port = int(register.text)
-            address = (args.ip, port)
+            address = (GPU_SERVER, port)
             send_video(address, args.video, args.fps, args.gray)
             tries = 0
 
