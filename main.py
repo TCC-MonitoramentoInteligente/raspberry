@@ -119,6 +119,8 @@ def main(args):
         except requests.ConnectionError:
             print("Unable to connect with object detection service")
             tries -= 1
+        except ValueError:
+            print(register.text)
 
 
 if __name__ == '__main__':
