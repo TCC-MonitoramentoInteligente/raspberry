@@ -72,6 +72,7 @@ def send_video(address, video, desired_fps, gray):
                 result, encoded_img = cv2.imencode('.jpg', frame, encode_param)
 
             if not result:
+                print('Could no compress frame')
                 break
 
             # video time
