@@ -12,7 +12,7 @@ GPU_SERVER = '10.1.0.2'
 
 
 def arg_parse():
-    parser = argparse.ArgumentParser(description='Server')
+    parser = argparse.ArgumentParser(description='Raspberry client')
     parser.add_argument("--video", help="Path to video file", default=0)
     parser.add_argument("--fps", help="Set video FPS", type=int, default=14)
     parser.add_argument("--gray", help="Convert video into gray scale", action="store_true")
@@ -98,7 +98,8 @@ def main(args):
     register_url = 'http://{}:8000/object-detection/register/'.format(GPU_SERVER)
 
     while not connected_to_internet():
-        time.sleep(5)
+        print('Waiting internet connection...')
+        time.sleep(3)
         pass
 
     if args.rasp_simulator:
@@ -106,10 +107,11 @@ def main(args):
     else:
         cam_id = get_id()
 
-    tries = 10
-    while tries > 0:
+    tries = 1
+    while tries <= 5:
         try:
-            register = requests.post(url=register_url, data={'cam_id': cam_id})
+            print('Registering. Attempt {}'.format(tries))
+            register = requests.post(url=register_url, timeout=5, data={'cam_id': cam_id})
 
             port = int(register.text)
             address = (GPU_SERVER, port)
