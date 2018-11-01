@@ -123,6 +123,7 @@ def main(args):
             tries -= 1
         except ValueError:
             print(register.text)
+            break
 
 
 if __name__ == '__main__':
