@@ -53,6 +53,10 @@ def send_video(address, video, desired_fps, gray):
         while cap.isOpened():
             ret, frame = cap.read()
             if not ret:
+                if video == 0:
+                    print('Could not read next frame')
+                else:
+                    print('End of video file')
                 break
 
             if gray:
