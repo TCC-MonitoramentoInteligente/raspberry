@@ -116,7 +116,7 @@ def main(args):
             port = int(register.text)
             address = (GPU_SERVER, port)
             send_video(address, args.video, args.fps, args.gray)
-            tries = 0
+            break
 
         except requests.ConnectionError:
             print("Unable to connect with object detection service")
