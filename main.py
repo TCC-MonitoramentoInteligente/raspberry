@@ -92,6 +92,8 @@ def send_video(address, video, desired_fps, gray):
                 time.sleep(desired_time - processing_time)
             processing_start = time.time()
 
+        print('End of video file or camera error')
+
     except KeyboardInterrupt:
         pass
 
