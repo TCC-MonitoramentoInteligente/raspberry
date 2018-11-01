@@ -111,7 +111,7 @@ def main(args):
     while tries <= 5:
         try:
             print('Registering. Attempt {}'.format(tries))
-            register = requests.post(url=register_url, timeout=5, data={'cam_id': cam_id})
+            register = requests.post(url=register_url, timeout=10, data={'cam_id': cam_id})
 
             port = int(register.text)
             address = (GPU_SERVER, port)
@@ -120,7 +120,7 @@ def main(args):
 
         except requests.ConnectionError:
             print("Unable to connect with object detection service")
-            tries -= 1
+            tries += 1
         except ValueError:
             print(register.text)
             break
