@@ -8,7 +8,7 @@ import numpy as np
 import requests
 
 MAX_SIZE = 65536 - 8  # less 8 bytes of video time
-GPU_SERVER = '10.1.0.2'
+OBJECT_DETECTION_SERVICE_IP, OBJECT_DETECTION_SERVICE_PORT = '10.1.0.3', 8030
 
 
 def arg_parse():
@@ -102,7 +102,8 @@ def send_video(address, video, desired_fps, gray):
 
 
 def main(args):
-    register_url = 'http://{}:8000/object-detection/register/'.format(GPU_SERVER)
+    register_url = 'http://{}:{}/object-detection/register/'\
+        .format(OBJECT_DETECTION_SERVICE_IP, OBJECT_DETECTION_SERVICE_PORT)
 
     while not connected_to_internet():
         print('Waiting internet connection...')
@@ -121,7 +122,7 @@ def main(args):
             register = requests.post(url=register_url, timeout=10, data={'cam_id': cam_id})
 
             port = int(register.text)
-            address = (GPU_SERVER, port)
+            address = (OBJECT_DETECTION_SERVICE_IP, port)
             send_video(address, args.video, args.fps, args.gray)
             break
 
