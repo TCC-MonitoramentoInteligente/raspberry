@@ -17,3 +17,8 @@ Raspberry code to video submission
 `sudo apt-get install libqtgui4`
 - `ImportError: libQtTest.so.4: cannot open shared object file: No such file or directory`  
 `sudo apt install libqt4-test`
+
+
+## Run
+- Activate virtualenv `$ source venv/bin/activate`
+- Run `python3 main.py -h` to get help

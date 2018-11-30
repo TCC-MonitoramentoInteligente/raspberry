@@ -1,5 +1,6 @@
 import argparse
 import socket
+import subprocess
 
 import cv2
 import time
@@ -13,17 +14,19 @@ OBJECT_DETECTION_SERVICE_IP, OBJECT_DETECTION_SERVICE_PORT = '10.1.0.3', 8030
 
 def arg_parse():
     parser = argparse.ArgumentParser(description='Raspberry client')
-    parser.add_argument("--video", help="Path to video file", default=0)
-    parser.add_argument("--fps", help="Set video FPS", type=int, default=14)
+    parser.add_argument("--video", help="Path to video file. Default = web cam.", default=0)
+    parser.add_argument("--fps", help="Set video FPS. Default = 14.", type=int, default=14)
     parser.add_argument("--gray", help="Convert video into gray scale", action="store_true")
     parser.add_argument("--rasp_simulator", help="This is not a Raspberry Pi", action="store_true")
+    parser.add_argument("--get_id", help="Get the Raspberry ID", action="store_true")
 
     return parser.parse_args()
 
 
 def get_id():
-    # TODO: get zerotier id
-    return 1
+    cmd = ['sudo', 'zerotier-cli', 'info']
+    a = subprocess.check_output(cmd)
+    return a.decode('utf-8').split(' ')[2]
 
 
 def connected_to_internet(url='http://www.google.com/', timeout=5):
@@ -102,6 +105,10 @@ def send_video(address, video, desired_fps, gray):
 
 
 def main(args):
+    if args.get_id:
+        print(get_id())
+        return
+
     register_url = 'http://{}:{}/object-detection/register/'\
         .format(OBJECT_DETECTION_SERVICE_IP, OBJECT_DETECTION_SERVICE_PORT)
 
